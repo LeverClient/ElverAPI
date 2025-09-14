@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class HypixelPlayer extends Api {
     public boolean hasStats;
-//test
+
     public String name;
 
     public String uuid;

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public abstract class ApiReader {
     protected HashMap<String, Object> apiMap = new HashMap<>();
-//test
+
     protected HashMap<String, Object> internalApiMap = new HashMap<>();
 
     public JSONObject jsonObject;

@@ -8,7 +8,7 @@ public class Bedwars extends SubApi {
     public Bedwars(HypixelPlayer parent) {
         super(parent, "stats.Bedwars");
     }
-//test
+
     public int getExperience() {
         return (int) internalApiMap.computeIfAbsent("exp", (k) -> {
             Object xp = get("Experience");

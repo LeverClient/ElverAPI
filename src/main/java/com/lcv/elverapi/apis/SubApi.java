@@ -3,7 +3,7 @@ package com.lcv.elverapi.apis;
 public abstract class SubApi extends ApiReader {
 
     public final Api parent;
-//test
+
     public final String prefix;
 
     public final String indexPrefix;

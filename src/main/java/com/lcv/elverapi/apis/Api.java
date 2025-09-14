@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 public abstract class Api extends ApiReader {
 
     protected int httpTries;
-//test
+
     protected HttpResponse<String> response;
 
     protected boolean noData;
