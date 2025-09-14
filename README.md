@@ -1,2 +1,2 @@
-# ElverAPI
-API for Elver
+# Elver
+Personal Discord Bot
