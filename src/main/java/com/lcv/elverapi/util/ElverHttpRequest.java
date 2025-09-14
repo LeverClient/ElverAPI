@@ -13,7 +13,7 @@ public class ElverHttpRequest {
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(uri)
                 .header("accept", "application/json");
-
+//test
         if (builderConsumer != null) builderConsumer.accept(requestBuilder);
 
         HttpRequest request = requestBuilder.build();

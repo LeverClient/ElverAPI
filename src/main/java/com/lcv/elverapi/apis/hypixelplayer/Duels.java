@@ -5,7 +5,7 @@ import com.lcv.elverapi.apis.SubApi;
 
 public class Duels extends SubApi
 {
-
+//test
     public Duels(HypixelPlayer parent)
     {
         super(parent, "stats.Duels");
