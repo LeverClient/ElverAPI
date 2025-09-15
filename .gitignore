@@ -2,7 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-ElverAPI/src/main/java/com/lcv/elverapi/Main.java
+src/main/java/com/lcv/elverapi/Main.java
 
 ### IntelliJ IDEA ###
 .idea/
