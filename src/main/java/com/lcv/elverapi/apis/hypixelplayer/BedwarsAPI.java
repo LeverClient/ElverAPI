@@ -104,19 +104,47 @@ public class BedwarsAPI extends SubApi {
         int level = getLevel();
         return (String) internalApiMap.computeIfAbsent("level_formatted", (k) -> formatRank(level));
     }
-//    public double getLevelPercentage()
-//    {
-//        int level = getLevel();
-//        int xp = getXp();
-//        int xpRequirement = switch (level % 100)
-//        {
-//            case 1 -> 500;
-//            case 2 -> 1000;
-//            case 3 -> 2000;
-//            case 4 -> 3500;
-//            default -> 5000;
-//        };
-//    }
+    public double getLevelPercentage()
+    {
+        int level = getLevel();
+        int nextLevel = level + 1;
+        int xp = getXp();
+        int overflowXp = xp - calculateXp(level);
+        int xpRequirement = switch (nextLevel % 100)
+        {
+            case 1 -> 500;
+            case 2 -> 1000;
+            case 3 -> 2000;
+            case 4 -> 3500;
+            default -> 5000;
+        };
+        double percentage = (double) overflowXp / xpRequirement * 100;
+        return (double) internalApiMap.computeIfAbsent("level_percentage", (k) -> percentage);
+    }
+    public static int calculateLevel(int xp) {
+        int level = (xp / 487000) * 100;
+        for (int[] easyXP = {500, 1000, 2000, 3500};(xp %= 487000) >= (level % 100 < 4 ? easyXP[level % 100] : 5000); xp -= level % 100 < 4 ? easyXP[level % 100] : 5000, level++);
+        return level;
+    }
+    public static int calculateXp(int level)
+    {
+        int prestige = level / 100;
+        int xp = prestige * XP_PER_PRESTIGE;
+        int remainingLevels = level - (prestige * 100);
+        while (remainingLevels > 0)
+        {
+            xp += switch (remainingLevels)
+            {
+                case 1 -> 500;
+                case 2 -> 1000;
+                case 3 -> 2000;
+                case 4 -> 3500;
+                default -> 5000;
+            };
+            remainingLevels--;
+        }
+        return xp;
+    }
 
     public int getNextPrestige()
     {
@@ -131,7 +159,9 @@ public class BedwarsAPI extends SubApi {
     public double getPrestigePercentage()
     {
         int xp = getXp();
-        int overflowXp = xp % XP_PER_PRESTIGE;
+        int level = getLevel();
+        int prestige = (level / 100) * 100;
+        int overflowXp = xp - calculateXp(prestige);
         double percentage = (double) overflowXp / XP_PER_PRESTIGE * 100;
         return (double) internalApiMap.computeIfAbsent("prestige_percentage", (k) -> percentage);
     }
@@ -254,16 +284,13 @@ public class BedwarsAPI extends SubApi {
             "✥"
     };
 
-    /**
-     * @return a pretty bedwars level! colors and everything!
-     */
     public static String formatRank(int level) {
-        int prestiges = level / 100;
-        int bigger_prestiges = (level - 100) / 1000; // what are these called anyway?
+        int prestige = level / 100;
+        int bigger_prestige = (level - 100) / 1000; // what are these called anyway?
 
         // get star color & suffix
-        String color = bedwarsPrestigeColors[Math.min(prestiges, bedwarsPrestigeColors.length - 1)];
-        String suffix = bedwarsPrestigeStars[Math.min(bigger_prestiges, bedwarsPrestigeStars.length - 1)];
+        String color = bedwarsPrestigeColors[Math.min(prestige, bedwarsPrestigeColors.length - 1)];
+        String suffix = bedwarsPrestigeStars[Math.min(bigger_prestige, bedwarsPrestigeStars.length - 1)];
         String levelStr = Integer.toString(level);
         int levelLen = levelStr.length();
 
@@ -291,45 +318,5 @@ public class BedwarsAPI extends SubApi {
             System.err.println(Arrays.toString(e.getStackTrace()));
             return "§c[ERR]";
         }
-    }
-
-    public static int getXpForPrestige(double level) {
-        int levelInt = (int) level;
-        int respectPrestige = levelInt % 100;
-        int levelXp = (int) ((level - levelInt)*5000);
-
-        if (respectPrestige > 4) {
-            return (100 - levelInt) * 5000 - levelXp;
-        }
-
-        int extraXpNeeded = 0;
-
-        for (int i = respectPrestige; i < 5; i++) {
-            extraXpNeeded += getBWExpForLevel(i);
-        }
-
-        return (100 - 4) * 5000 + extraXpNeeded - levelXp;
-    }
-
-
-
-    // stole this code from plancke's github. i don't know how it works
-    // actually i might've found it on the hypixel forums, but it's originally from here. i don't remember if i ported it to java myself
-    // https://github.com/Plancke/hypixel-php/blob/2303c4bdedb650acc8315393885284dba59fdd79/src/util/games/bedwars/ExpCalculator.php
-    public static int getBWExpForLevel(int level) {
-        return switch (level % 100) {
-            case 0 -> 0;
-            case 1 -> 500;
-            case 2 -> 1000;
-            case 3 -> 2000;
-            case 4 -> 3500;
-            default -> 5000;
-        };
-    }
-
-    public static int calculateLevel(int xp) {
-        int level = (xp / 487000) * 100;
-        for (int[] easyXP = {500, 1000, 2000, 3500};(xp %= 487000) >= (level % 100 < 4 ? easyXP[level % 100] : 5000); xp -= level % 100 < 4 ? easyXP[level % 100] : 5000, level++);
-        return level;
     }
 }
