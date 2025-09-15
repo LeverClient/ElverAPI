@@ -1,6 +1,7 @@
 package com.lcv.elverapi.apis;
 
 import com.lcv.elverapi.util.ElverHttpRequest;
+import org.json.JSONObject;
 
 import java.net.http.HttpResponse;
 
@@ -20,6 +21,11 @@ public abstract class Api extends ApiReader {
 
     public HttpResponse<String> getResponse() {
         return response;
+    }
+
+    public JSONObject setupJson() {
+        doHttp();
+        return this.jsonObject = new JSONObject(response.body());
     }
 
     public void doHttp() {
