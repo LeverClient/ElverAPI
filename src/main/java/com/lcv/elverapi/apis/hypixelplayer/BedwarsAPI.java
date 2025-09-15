@@ -209,7 +209,7 @@ public class BedwarsAPI extends SubApi {
         return (100 - 4) * 5000 + extraXpNeeded - levelXp;
     }
 
-    public static final double XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + 5000*96; //487000;
+    public static final double XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + 5000 * 96; //487000;
 
     // stole this code from plancke's github. i don't know how it works
     // actually i might've found it on the hypixel forums, but it's originally from here. i don't remember if i ported it to java myself

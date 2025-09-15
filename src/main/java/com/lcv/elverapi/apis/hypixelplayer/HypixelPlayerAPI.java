@@ -114,7 +114,9 @@ public class HypixelPlayerAPI extends Api {
         this.apiKey = apiKey;
         this.uuid = uuid;
 
-        this.jsonObject = setupJson();
+        doHttp();
+
+        this.jsonObject = new JSONObject(response.body());
 
         noData = noData || (this.jsonObject = (JSONObject) get("player")) == null;
         hasStats = get("stats") != null;

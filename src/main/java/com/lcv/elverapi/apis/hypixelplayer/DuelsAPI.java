@@ -1,12 +1,11 @@
 package com.lcv.elverapi.apis.hypixelplayer;
 
-import com.lcv.elverapi.apis.Api;
 import com.lcv.elverapi.apis.SubApi;
 
-public class Duels extends SubApi
+public class DuelsAPI extends SubApi
 {
 
-    public Duels(HypixelPlayer parent)
+    public DuelsAPI(HypixelPlayerAPI parent)
     {
         super(parent, "stats.Duels");
     }
