@@ -5,17 +5,87 @@ import com.lcv.elverapi.apis.SubApi;
 import java.util.Arrays;
 
 public class BedwarsAPI extends SubApi {
-    public BedwarsAPI(HypixelPlayerAPI parent) {
+    public BedwarsAPI(HypixelPlayerAPI parent)
+    {
         super(parent, "stats.Bedwars");
+    }
+
+    public int getIron()
+    {
+        return (int) internalApiMap.computeIfAbsent("iron", (k) -> get("iron_resources_collected_bedwars"));
+    }
+    public int getGold()
+    {
+        return (int) internalApiMap.computeIfAbsent("gold", (k) -> get("gold_resources_collected_bedwars"));
+    }
+    public int getDiamond()
+    {
+        return (int) internalApiMap.computeIfAbsent("diamond", (k) -> get("diamond_resources_collected_bedwars"));
+    }
+    public int getEmerald()
+    {
+        return (int) internalApiMap.computeIfAbsent("emerald", (k) -> get("emerald_resources_collected_bedwars"));
     }
 
     public int getWins()
     {
-        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get("wins"));
+        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get("wins_bedwars"));
+    }
+    public int getLosses()
+    {
+        return (int) internalApiMap.computeIfAbsent("losses", (k) -> get("losses_bedwars"));
+    }
+    public double getWLR()
+    {
+        double wlr = (double) getWins() / getLosses();
+        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> wlr);
     }
 
-    public int getExperience() {
-        return (int) internalApiMap.computeIfAbsent("exp", (k) -> {
+    public int getFinalKills()
+    {
+        return (int) internalApiMap.computeIfAbsent("final_kills", (k) -> get("final_kills_bedwars"));
+    }
+    public int getFinalDeaths()
+    {
+        return (int) internalApiMap.computeIfAbsent("final_deaths", (k) -> get("final_deaths_bedwars"));
+    }
+    public double getFKDR()
+    {
+        double fkdr = (double) getFinalKills() / getFinalDeaths();
+        return (double) internalApiMap.computeIfAbsent("fkdr", (k) -> fkdr);
+    }
+
+    public int getKills()
+    {
+        return (int) internalApiMap.computeIfAbsent("kills", (k) -> get("kills_bedwars"));
+    }
+    public int getDeaths()
+    {
+        return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get("deaths_bedwars"));
+    }
+    public double getKDR()
+    {
+        double kdr = (double) getKills() / getDeaths();
+        return (double) internalApiMap.computeIfAbsent("kdr", (k) -> kdr);
+    }
+
+    public int getBedsBroken()
+    {
+        return (int) internalApiMap.computeIfAbsent("beds_broken", (k) -> get("beds_broken_bedwars"));
+    }
+    public int getBedsLost()
+    {
+        return (int) internalApiMap.computeIfAbsent("beds_lost", (k) -> get("beds_lost_bedwars"));
+    }
+    public double getBBLR()
+    {
+        double bblr = (double) getBedsBroken() / getBedsLost();
+        return (double) internalApiMap.computeIfAbsent("bblr", (k) -> bblr);
+    }
+
+    private static final int XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + (5000 * 96); //487000
+    public int getXp() {
+        return (int) internalApiMap.computeIfAbsent("xp", (k) -> {
             Object xp = get("Experience");
 
             if (xp instanceof Number num) {
@@ -25,17 +95,45 @@ public class BedwarsAPI extends SubApi {
             return xp;
         });
     }
-
-    public double getLevel() {
-        int xp = getExperience();
-
-        return (double) internalApiMap.computeIfAbsent("level", (k) -> getLevelForExp(xp));
+    public int getLevel()
+    {
+        int xp = getXp();
+        return (int) internalApiMap.computeIfAbsent("level", (k) -> calculateLevel(xp));
     }
+    public String getLevelFormatted() {
+        int level = getLevel();
+        return (String) internalApiMap.computeIfAbsent("level_formatted", (k) -> formatRank(level));
+    }
+//    public double getLevelPercentage()
+//    {
+//        int level = getLevel();
+//        int xp = getXp();
+//        int xpRequirement = switch (level % 100)
+//        {
+//            case 1 -> 500;
+//            case 2 -> 1000;
+//            case 3 -> 2000;
+//            case 4 -> 3500;
+//            default -> 5000;
+//        };
+//    }
 
-    public String getChatFormattedLevel() {
-        double level = getLevel();
-
-        return (String) internalApiMap.computeIfAbsent("chat_level", (k) -> getFormattedLevel((int) level));
+    public int getNextPrestige()
+    {
+        int nextPrestige = ((getLevel() / 100) + 1) * 100;
+        return (int) internalApiMap.computeIfAbsent("next_prestige", (k) -> nextPrestige);
+    }
+    public String getNextPrestigeFormatted()
+    {
+        int nextPrestige = getNextPrestige();
+        return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", (k) -> formatRank(nextPrestige));
+    }
+    public double getPrestigePercentage()
+    {
+        int xp = getXp();
+        int overflowXp = xp % XP_PER_PRESTIGE;
+        double percentage = (double) overflowXp / XP_PER_PRESTIGE * 100;
+        return (double) internalApiMap.computeIfAbsent("prestige_percentage", (k) -> percentage);
     }
 
     public String[] getQuickbuy() {
@@ -80,7 +178,6 @@ public class BedwarsAPI extends SubApi {
             return quickbuy;
         });
     }
-
     public String[] getHotbar() {
         return (String[]) internalApiMap.computeIfAbsent("hotbar", (k) -> {
             String favorites = (String) get("favorite_slots");
@@ -160,7 +257,7 @@ public class BedwarsAPI extends SubApi {
     /**
      * @return a pretty bedwars level! colors and everything!
      */
-    public static String getFormattedLevel(int level) {
+    public static String formatRank(int level) {
         int prestiges = level / 100;
         int bigger_prestiges = (level - 100) / 1000; // what are these called anyway?
 
@@ -214,7 +311,7 @@ public class BedwarsAPI extends SubApi {
         return (100 - 4) * 5000 + extraXpNeeded - levelXp;
     }
 
-    public static final double XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + 5000 * 96; //487000;
+
 
     // stole this code from plancke's github. i don't know how it works
     // actually i might've found it on the hypixel forums, but it's originally from here. i don't remember if i ported it to java myself
@@ -230,27 +327,7 @@ public class BedwarsAPI extends SubApi {
         };
     }
 
-    public static double getLevelForExp(int exp) {
-        int prestiges = (int) (exp / XP_PER_PRESTIGE);
-        int level = prestiges * 100;
-        int expWithoutPrestiges = (int) (exp - (prestiges * XP_PER_PRESTIGE));
-        int xpThisLevel = 5000;
-        for (int i = 1; i <= 4; i++) {
-            int expForEasyLevel = getBWExpForLevel(i);
-            if (expWithoutPrestiges < expForEasyLevel) {
-                xpThisLevel = expForEasyLevel;
-                break;
-            }
-
-            level++;
-            expWithoutPrestiges -= expForEasyLevel;
-        }
-
-        return level + (double) expWithoutPrestiges / xpThisLevel;
-    }
-
-    // this method hurts me
-    public static int getBedwarsLevel(int xp) {
+    public static int calculateLevel(int xp) {
         int level = (xp / 487000) * 100;
         for (int[] easyXP = {500, 1000, 2000, 3500};(xp %= 487000) >= (level % 100 < 4 ? easyXP[level % 100] : 5000); xp -= level % 100 < 4 ? easyXP[level % 100] : 5000, level++);
         return level;
