@@ -9,6 +9,11 @@ public class BedwarsAPI extends SubApi {
         super(parent, "stats.Bedwars");
     }
 
+    public int getWins()
+    {
+        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get("wins"));
+    }
+
     public int getExperience() {
         return (int) internalApiMap.computeIfAbsent("exp", (k) -> {
             Object xp = get("Experience");
