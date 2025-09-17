@@ -6,13 +6,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class HypixelPlayerAPI extends Api {
-    public boolean hasStats;
+    private boolean hasStats;
 
-    public String name;
+    private final String name;
 
-    public String uuid;
+    private final String uuid;
 
-    public String apiKey;
+    private final String apiKey;
 
 
     public static HashMap<String, String> colorLookup = new HashMap<>();
@@ -122,7 +122,7 @@ public class HypixelPlayerAPI extends Api {
         hasStats = get("stats") != null;
 
         name = (String) get("displayname");
-        this.uuid = (String) get("uuid");
+        // this.uuid = (String) get("uuid");
     }
 
     // sub apis
@@ -170,7 +170,7 @@ public class HypixelPlayerAPI extends Api {
         });
     }
 
-    public String getChatFormattedRank() {
+    public String getRankFormatted() {
         String rank = getRank();
         String plusCol = getPlusColor();
         String rankCol = getRankColor();
@@ -178,9 +178,14 @@ public class HypixelPlayerAPI extends Api {
         return (String) internalApiMap.computeIfAbsent("rank_minecraft", (k) -> getRankFormatted(rank, plusCol, rankCol, (String) get("prefix")));
     }
 
-    public String getChatFormattedName() {
-        String rankFormat = getChatFormattedRank();
+    public String getNameFormatted() {
+        String rankFormat = getRankFormatted();
 
-        return (String) internalApiMap.computeIfAbsent("name_minecraft", (k) -> rankFormat + name + ":");
+        return (String) internalApiMap.computeIfAbsent("name_minecraft", (k) -> rankFormat + name);
+    }
+
+    public String getUUID()
+    {
+        return uuid;
     }
 }

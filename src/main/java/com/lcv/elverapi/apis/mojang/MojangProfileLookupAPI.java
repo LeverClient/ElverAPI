@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public class MojangProfileLookupAPI extends Api {
 
-    final String playerName;
+    private final String playerName;
 
-    final UUID playerUUID;
+    private final UUID playerUUID;
 
     public MojangProfileLookupAPI(String playerName) {
         this.playerName = playerName;
@@ -36,7 +36,7 @@ public class MojangProfileLookupAPI extends Api {
         return (String) internalApiMap.computeIfAbsent("name", (k) -> get("name"));
     }
 
-    public String getId() {
+    public String getUUID() {
         return (String) internalApiMap.computeIfAbsent("uuid", (k) -> get("id"));
     }
 }
