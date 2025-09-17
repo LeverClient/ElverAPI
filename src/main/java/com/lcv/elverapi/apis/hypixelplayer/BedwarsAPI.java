@@ -5,113 +5,100 @@ import com.lcv.elverapi.apis.SubApi;
 import java.util.Arrays;
 
 public class BedwarsAPI extends SubApi {
-    public BedwarsAPI(HypixelPlayerAPI parent)
-    {
+    public BedwarsAPI(HypixelPlayerAPI parent) {
         super(parent, "stats.Bedwars");
     }
 
-    public int getIron()
-    {
+    public int getIron() {
         return (int) internalApiMap.computeIfAbsent("iron", (k) -> get("iron_resources_collected_bedwars"));
     }
-    public int getGold()
-    {
+
+    public int getGold() {
         return (int) internalApiMap.computeIfAbsent("gold", (k) -> get("gold_resources_collected_bedwars"));
     }
-    public int getDiamond()
-    {
+
+    public int getDiamond() {
         return (int) internalApiMap.computeIfAbsent("diamond", (k) -> get("diamond_resources_collected_bedwars"));
     }
-    public int getEmerald()
-    {
+
+    public int getEmerald() {
         return (int) internalApiMap.computeIfAbsent("emerald", (k) -> get("emerald_resources_collected_bedwars"));
     }
 
-    public int getWins()
-    {
+    public int getWins() {
         return (int) internalApiMap.computeIfAbsent("wins", (k) -> get("wins_bedwars"));
     }
-    public int getLosses()
-    {
+
+    public int getLosses() {
         return (int) internalApiMap.computeIfAbsent("losses", (k) -> get("losses_bedwars"));
     }
-    public double getWLR()
-    {
+
+    public double getWLR() {
         double wlr = (double) getWins() / getLosses();
         return (double) internalApiMap.computeIfAbsent("wlr", (k) -> wlr);
     }
 
-    public int getFinalKills()
-    {
+    public int getFinalKills() {
         return (int) internalApiMap.computeIfAbsent("final_kills", (k) -> get("final_kills_bedwars"));
     }
-    public int getFinalDeaths()
-    {
+
+    public int getFinalDeaths() {
         return (int) internalApiMap.computeIfAbsent("final_deaths", (k) -> get("final_deaths_bedwars"));
     }
-    public double getFKDR()
-    {
+
+    public double getFKDR() {
         double fkdr = (double) getFinalKills() / getFinalDeaths();
         return (double) internalApiMap.computeIfAbsent("fkdr", (k) -> fkdr);
     }
 
-    public int getKills()
-    {
+    public int getKills() {
         return (int) internalApiMap.computeIfAbsent("kills", (k) -> get("kills_bedwars"));
     }
-    public int getDeaths()
-    {
+
+    public int getDeaths() {
         return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get("deaths_bedwars"));
     }
-    public double getKDR()
-    {
+
+    public double getKDR() {
         double kdr = (double) getKills() / getDeaths();
         return (double) internalApiMap.computeIfAbsent("kdr", (k) -> kdr);
     }
 
-    public int getBedsBroken()
-    {
+    public int getBedsBroken() {
         return (int) internalApiMap.computeIfAbsent("beds_broken", (k) -> get("beds_broken_bedwars"));
     }
-    public int getBedsLost()
-    {
+
+    public int getBedsLost() {
         return (int) internalApiMap.computeIfAbsent("beds_lost", (k) -> get("beds_lost_bedwars"));
     }
-    public double getBBLR()
-    {
+
+    public double getBBLR() {
         double bblr = (double) getBedsBroken() / getBedsLost();
         return (double) internalApiMap.computeIfAbsent("bblr", (k) -> bblr);
     }
 
     private static final int XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + (5000 * 96); //487000
+
     public int getXp() {
-        return (int) internalApiMap.computeIfAbsent("xp", (k) -> {
-            Object xp = get("Experience");
-
-            if (xp instanceof Number num) {
-                return num.intValue();
-            }
-
-            return xp;
-        });
+        return (int) internalApiMap.computeIfAbsent("xp", (k) -> get("Experience"));
     }
-    public int getLevel()
-    {
+
+    public int getLevel() {
         int xp = getXp();
         return (int) internalApiMap.computeIfAbsent("level", (k) -> calculateLevel(xp));
     }
+
     public String getLevelFormatted() {
         int level = getLevel();
         return (String) internalApiMap.computeIfAbsent("level_formatted", (k) -> formatRank(level));
     }
-    public double getLevelPercentage()
-    {
+
+    public double getLevelPercentage() {
         int level = getLevel();
         int nextLevel = level + 1;
         int xp = getXp();
         int overflowXp = xp - calculateXp(level);
-        int xpRequirement = switch (nextLevel % 100)
-        {
+        int xpRequirement = switch (nextLevel % 100) {
             case 1 -> 500;
             case 2 -> 1000;
             case 3 -> 2000;
@@ -121,20 +108,32 @@ public class BedwarsAPI extends SubApi {
         double percentage = (double) overflowXp / xpRequirement * 100;
         return (double) internalApiMap.computeIfAbsent("level_percentage", (k) -> percentage);
     }
+
     public static int calculateLevel(int xp) {
-        int level = (xp / 487000) * 100;
-        for (int[] easyXP = {500, 1000, 2000, 3500};(xp %= 487000) >= (level % 100 < 4 ? easyXP[level % 100] : 5000); xp -= level % 100 < 4 ? easyXP[level % 100] : 5000, level++);
+        int level = (xp / XP_PER_PRESTIGE) * 100;
+        int overflowXp = xp - calculateXp(level);
+        while (true) {
+            int xpReq = switch (level % 100) {
+                case 0 -> 500;
+                case 1 -> 1000;
+                case 2 -> 2000;
+                case 3 -> 3500;
+                default -> 5000;
+            };
+            if (xpReq > overflowXp)
+                break;
+            overflowXp -= xpReq;
+            level++;
+        }
         return level;
     }
-    public static int calculateXp(int level)
-    {
+
+    public static int calculateXp(int level) {
         int prestige = level / 100;
         int xp = prestige * XP_PER_PRESTIGE;
         int remainingLevels = level - (prestige * 100);
-        while (remainingLevels > 0)
-        {
-            xp += switch (remainingLevels)
-            {
+        while (remainingLevels > 0) {
+            xp += switch (remainingLevels) {
                 case 1 -> 500;
                 case 2 -> 1000;
                 case 3 -> 2000;
@@ -146,18 +145,17 @@ public class BedwarsAPI extends SubApi {
         return xp;
     }
 
-    public int getNextPrestige()
-    {
+    public int getNextPrestige() {
         int nextPrestige = ((getLevel() / 100) + 1) * 100;
         return (int) internalApiMap.computeIfAbsent("next_prestige", (k) -> nextPrestige);
     }
-    public String getNextPrestigeFormatted()
-    {
+
+    public String getNextPrestigeFormatted() {
         int nextPrestige = getNextPrestige();
         return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", (k) -> formatRank(nextPrestige));
     }
-    public double getPrestigePercentage()
-    {
+
+    public double getPrestigePercentage() {
         int xp = getXp();
         int level = getLevel();
         int prestige = (level / 100) * 100;
@@ -177,49 +175,74 @@ public class BedwarsAPI extends SubApi {
             // change some names around
             for (int i = 0; i < quickbuy.length; i++) {
                 String item = quickbuy[i];
-                String newName = switch(item) {
+                String newName = switch (item) {
+                    // blocks
+                    case "wool" -> "wool_colored_white";
+                    case "hardened_clay" -> "clay";
+                    case "wood", "oak_wood_planks" -> "wood";
+                    case "end_stone" -> "end_stone";
+                    case "blast-proof_glass" -> "glass";
+                    case "ladder" -> "ladder";
+                    case "obsidian" -> "obsidian";
+
+                    // melee
+                    case "stone_sword" -> "stone_sword";
+                    case "iron_sword" -> "iron_sword";
+                    case "diamond_sword" -> "diamond_sword";
                     case "stick_(knockback_i)" -> "kb_stick";
+
+                    // armor
+                    case "chainmail_boots" -> "chainmail_armor";
+                    case "iron_boots" -> "iron_armor";
+                    case "diamond_boots" -> "diamond_armor";
+
+                    // tools
+                    case "wooden_axe" -> "axe";
+                    case "wooden_pickaxe" -> "pickaxe";
+                    case "shears" -> "shears";
+
+                    // ranged
+                    case "arrow" -> "arrow";
                     case "bow_(power_i)" -> "power_bow";
                     case "bow_(power_i__punch_i)" -> "punch_bow";
 
-                    case "wooden_pickaxe" -> "wood_pickaxe";
-                    case "wooden_axe" -> "wood_axe";
+                    // potions
+                    case "speed_ii_potion_(45_seconds)" -> "speed_potion";
+                    case "jump_v_potion_(45_seconds)" -> "jump_potion";
+                    case "invisibility_potion_(30_seconds)" -> "invisibility_potion";
 
-                    case "blast-proof_glass" -> "glass";
-                    case "hardened_clay" -> "clay";
-
-                    case "speed_ii_potion_(45_seconds)" -> "speed_pot";
-                    case "jump_v_potion_(45_seconds)" -> "jump_pot";
-                    case "invisibility_potion_(30_seconds)" -> "invis_pot";
-
-                    case "water_bucket" -> "water";
+                    // utility
+                    case "golden_apple" -> "golden_apple";
+                    // bedbug uh oh
+                    case "dream_defender" -> "iron_golem";
+                    case "fireball" -> "fireball";
+                    case "tnt" -> "tnt";
+                    case "ender_pearl" -> "ender_pearl";
+                    case "water_bucket" -> "water_bucket";
+                    case "bridge_egg" -> "bridge_egg";
                     case "magic_milk" -> "milk";
-                    case "golden_apple" -> "gapple";
-                    case "dream_defender" -> "golem";
+                    case "sponge" -> "sponge";
                     case "compact_pop-up_tower" -> "popup_tower";
 
                     case "", " ", "null" -> "none";
                     default -> item;
                 };
-
                 quickbuy[i] = newName;
             }
-
             return quickbuy;
         });
     }
+
     public String[] getHotbar() {
         return (String[]) internalApiMap.computeIfAbsent("hotbar", (k) -> {
             String favorites = (String) get("favorite_slots");
-
             if (favorites == null) return new String[0];
-
             return favorites.split(",");
         });
     }
 
     // bedwars stars. %x$s = (x+3)th character of the level. including star. 0 = full string, 1 = full level, 2 = star. (i think)
-    public final static String[] bedwarsPrestigeColors = {
+    public final static String[] BEDWARS_PRESTIGE_COLORS = {
             "§7 [ %1$s %2$s", // stone 0
             "§f [ %1$s %2$s", // iron 100
             "§6 [ %1$s %2$s", // gold 200
@@ -277,7 +300,7 @@ public class BedwarsAPI extends SubApi {
     };
 
     // bedwars stars. each index in the array corresponds to 1000 stars higher
-    public final static String[] bedwarsPrestigeStars = {
+    public final static String[] BEDWARS_PRESTIGE_STARS = {
             "✫",
             "✪",
             "⚝",
@@ -286,11 +309,11 @@ public class BedwarsAPI extends SubApi {
 
     public static String formatRank(int level) {
         int prestige = level / 100;
-        int bigger_prestige = (level - 100) / 1000; // what are these called anyway?
+        int bigger_prestige = (level - 100) / 1000;
 
         // get star color & suffix
-        String color = bedwarsPrestigeColors[Math.min(prestige, bedwarsPrestigeColors.length - 1)];
-        String suffix = bedwarsPrestigeStars[Math.min(bigger_prestige, bedwarsPrestigeStars.length - 1)];
+        String color = BEDWARS_PRESTIGE_COLORS[Math.min(prestige, BEDWARS_PRESTIGE_COLORS.length - 1)];
+        String suffix = BEDWARS_PRESTIGE_STARS[Math.min(bigger_prestige, BEDWARS_PRESTIGE_STARS.length - 1)];
         String levelStr = Integer.toString(level);
         int levelLen = levelStr.length();
 
