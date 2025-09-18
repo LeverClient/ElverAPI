@@ -113,6 +113,11 @@ public class HypixelPlayerAPI extends Api
         return (BedwarsAPI) internalApiMap.computeIfAbsent("api/bedwars", (k) -> new BedwarsAPI(this));
     }
 
+    public DuelsAPI getDuelsApi()
+    {
+        return (DuelsAPI) internalApiMap.computeIfAbsent("api/duels", (k) -> new DuelsAPI(this));
+    }
+
     public static String formatRank(String rank, String plusColor, String rankColor, String prefix)
     {
         StringBuilder nameFormatted = new StringBuilder();
