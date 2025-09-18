@@ -166,7 +166,7 @@ public class BedwarsAPI extends SubApi {
 
     public String[] getQuickbuy() {
         return (String[]) internalApiMap.computeIfAbsent("quickbuy", (k) -> {
-            String favorites = (String) get("favourites_2"); // TODO: are there more api fields for this?
+            String favorites = (String) get("favourites_2");
 
             if (favorites == null) return new String[0];
 
@@ -177,7 +177,7 @@ public class BedwarsAPI extends SubApi {
                 String item = quickbuy[i];
                 String newName = switch (item) {
                     // blocks
-                    case "wool" -> "wool_colored_white";
+                    case "wool" -> "wool";
                     case "hardened_clay" -> "clay";
                     case "wood", "oak_wood_planks" -> "wood";
                     case "end_stone" -> "end_stone";
@@ -203,6 +203,7 @@ public class BedwarsAPI extends SubApi {
 
                     // ranged
                     case "arrow" -> "arrow";
+                    case "bow" -> "bow";
                     case "bow_(power_i)" -> "power_bow";
                     case "bow_(power_i__punch_i)" -> "punch_bow";
 
@@ -214,15 +215,15 @@ public class BedwarsAPI extends SubApi {
                     // utility
                     case "golden_apple" -> "golden_apple";
                     // bedbug uh oh
-                    case "dream_defender" -> "iron_golem";
+                    case "dream_defender" -> "dream_defender";
                     case "fireball" -> "fireball";
                     case "tnt" -> "tnt";
                     case "ender_pearl" -> "ender_pearl";
                     case "water_bucket" -> "water_bucket";
                     case "bridge_egg" -> "bridge_egg";
-                    case "magic_milk" -> "milk";
+                    case "magic_milk" -> "magic_milk";
                     case "sponge" -> "sponge";
-                    case "compact_pop-up_tower" -> "popup_tower";
+                    case "compact_pop-up_tower" -> "pop-up_tower";
 
                     case "", " ", "null" -> "none";
                     default -> item;
