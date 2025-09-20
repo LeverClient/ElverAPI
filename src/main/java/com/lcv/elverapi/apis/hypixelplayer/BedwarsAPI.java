@@ -34,8 +34,9 @@ public class BedwarsAPI extends SubApi {
     }
 
     public double getWLR() {
-        double wlr = (double) getWins() / getLosses();
-        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> wlr);
+        int wins = getWins();
+        int losses = getLosses();
+        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> (double) wins / losses);
     }
 
     public int getFinalKills() {
@@ -47,8 +48,9 @@ public class BedwarsAPI extends SubApi {
     }
 
     public double getFKDR() {
-        double fkdr = (double) getFinalKills() / getFinalDeaths();
-        return (double) internalApiMap.computeIfAbsent("fkdr", (k) -> fkdr);
+        int finalKills = getFinalKills();
+        int finalDeaths = getFinalDeaths();
+        return (double) internalApiMap.computeIfAbsent("fkdr", (k) -> (double) finalKills / finalDeaths);
     }
 
     public int getKills() {
@@ -60,8 +62,9 @@ public class BedwarsAPI extends SubApi {
     }
 
     public double getKDR() {
-        double kdr = (double) getKills() / getDeaths();
-        return (double) internalApiMap.computeIfAbsent("kdr", (k) -> kdr);
+        int kills = getKills();
+        int deaths = getDeaths();
+        return (double) internalApiMap.computeIfAbsent("kdr", (k) -> (double) kills / deaths);
     }
 
     public int getBedsBroken() {
@@ -73,8 +76,9 @@ public class BedwarsAPI extends SubApi {
     }
 
     public double getBBLR() {
-        double bblr = (double) getBedsBroken() / getBedsLost();
-        return (double) internalApiMap.computeIfAbsent("bblr", (k) -> bblr);
+        int bedsBroken = getBedsBroken();
+        int bedsLost = getBedsLost();
+        return (double) internalApiMap.computeIfAbsent("bblr", (k) -> (double) bedsBroken / bedsLost);
     }
 
     private static final int XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + (5000 * 96); //487000

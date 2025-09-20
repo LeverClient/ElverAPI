@@ -18,8 +18,9 @@ public class DuelsAPI extends SubApi {
     }
 
     public double getWLR() {
-        double wlr = (double) getWins() / getLosses();
-        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> wlr);
+        int wins = getWins();
+        int losses = getLosses();
+        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> (double) wins / losses);
     }
 
     public int getKills() {
@@ -30,9 +31,10 @@ public class DuelsAPI extends SubApi {
         return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get("deaths"));
     }
 
-    public double getFKDR() {
-        double fkdr = (double) getKills() / getDeaths();
-        return (double) internalApiMap.computeIfAbsent("fkdr", (k) -> get("fkdr"));
+    public double getKDR() {
+        int kills = getKills();
+        int deaths = getDeaths();
+        return (double) internalApiMap.computeIfAbsent("kdr", (k) -> (double) kills / deaths);
     }
 
     public int getBowShot() {
@@ -44,8 +46,9 @@ public class DuelsAPI extends SubApi {
     }
 
     public double getBowAccuracy() {
-        double accuracy = (double) getBowHit() / getBowShot() * 100;
-        return (double) internalApiMap.computeIfAbsent("bow_accuracy", (k) -> accuracy);
+        int bowHit = getBowHit();
+        int bowShot = getBowShot();
+        return (double) internalApiMap.computeIfAbsent("bow_accuracy", (k) -> (double) bowHit / bowShot * 100);
     }
 
     public int getSwordSwung() {
@@ -57,8 +60,9 @@ public class DuelsAPI extends SubApi {
     }
 
     public double getSwordAccuracy() {
-        double accuracy = (double) getSwordHit() / getSwordSwung() * 100;
-        return (double) internalApiMap.computeIfAbsent("sword_accuracy", (k) -> accuracy);
+        int swordHit = getSwordHit();
+        int swordSwung = getSwordSwung();
+        return (double) internalApiMap.computeIfAbsent("sword_accuracy", (k) -> (double) swordHit / swordSwung * 100);
     }
 
     public int getHealthHealed() {
