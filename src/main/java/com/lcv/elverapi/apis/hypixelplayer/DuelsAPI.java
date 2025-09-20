@@ -122,6 +122,26 @@ public class DuelsAPI extends SubApi {
         return (double) internalApiMap.computeIfAbsent("prestige_percentage", (k) -> percentage);
     }
 
+    public String getNextPrestige() {
+        String prestige = getPrestige();
+        String nextPrestige = "";
+        for (int i = 0; i < PRESTIGE_LIST.length; i++)
+        {
+            if (prestige.equals(PRESTIGE_LIST[i]))
+            {
+                nextPrestige = PRESTIGE_LIST[i + 1];
+                break;
+            }
+        }
+        final String finalNextPrestige = nextPrestige;
+        return (String) internalApiMap.computeIfAbsent("next_prestige", (k) -> finalNextPrestige);
+    }
+
+    public String getNextPrestigeFormatted() {
+        String nextPrestige = getNextPrestige();
+        return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", (k) -> formatRank(nextPrestige));
+    }
+
     public String getRank() {
         String prestige = getPrestige();
         StringBuilder rank = new StringBuilder(prestige + " ");
@@ -182,6 +202,7 @@ public class DuelsAPI extends SubApi {
         PRESTIGE_COLOR_MAP.put("Celestial", "§b");
         PRESTIGE_COLOR_MAP.put("Divine", "§d");
         PRESTIGE_COLOR_MAP.put("Ascended", "§c");
+        PRESTIGE_COLOR_MAP.put("MAX", "§6");
     }
 
     public static final int[] PRESTIGE_WIN_LIST = {
@@ -197,6 +218,7 @@ public class DuelsAPI extends SubApi {
             100000, // celestial -> divine
             200000, // divine -> ascended
             1180000, // ascended -> max (ascended 50)
+            0 // max (ascended 50)
     };
 
     public static final int[] RANK_WIN_LIST = {
@@ -212,6 +234,7 @@ public class DuelsAPI extends SubApi {
             10000, // celestial -> divine
             20000, // divine -> ascended
             20000, // ascended -> max (ascended 50)
+            0 // max (ascended 50)
     };
 
     public static final String[] PRESTIGE_LIST = {
@@ -226,6 +249,7 @@ public class DuelsAPI extends SubApi {
             "Godlike",
             "Celestial",
             "Divine",
-            "Ascended"
+            "Ascended",
+            "MAX"
     };
 }
