@@ -159,19 +159,6 @@ public class DuelsAPI extends SubApi {
         return (String[]) internalApiMap.computeIfAbsent("recent_played", (k) -> ((String) get("duels_recently_played2")).split("#"));
     }
 
-    public HashMap<String, Boolean> getDuelPreferences()
-    {
-        return null;
-    }
-
-    public String[] getFavorites()
-    {
-        // todo: favorite games (idk)
-        return null;
-    }
-
-
-
     public static String formatRank(String rank) {
         return PRESTIGE_COLOR_MAP.get(rank.split(" ")[0]) + rank;
     }
