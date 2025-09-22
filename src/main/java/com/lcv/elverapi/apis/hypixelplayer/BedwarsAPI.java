@@ -10,27 +10,27 @@ public class BedwarsAPI extends SubApi {
     }
 
     public int getIron() {
-        return (int) internalApiMap.computeIfAbsent("iron", (k) -> get("iron_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("iron", (k) -> get(0, "iron_resources_collected_bedwars"));
     }
 
     public int getGold() {
-        return (int) internalApiMap.computeIfAbsent("gold", (k) -> get("gold_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("gold", (k) -> get(0, "gold_resources_collected_bedwars"));
     }
 
     public int getDiamond() {
-        return (int) internalApiMap.computeIfAbsent("diamond", (k) -> get("diamond_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("diamond", (k) -> get(0, "diamond_resources_collected_bedwars"));
     }
 
     public int getEmerald() {
-        return (int) internalApiMap.computeIfAbsent("emerald", (k) -> get("emerald_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("emerald", (k) -> get(0, "emerald_resources_collected_bedwars"));
     }
 
     public int getWins() {
-        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get("wins_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get(0, "wins_bedwars"));
     }
 
     public int getLosses() {
-        return (int) internalApiMap.computeIfAbsent("losses", (k) -> get("losses_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("losses", (k) -> get(0,"losses_bedwars"));
     }
 
     public double getWLR() {
@@ -40,11 +40,11 @@ public class BedwarsAPI extends SubApi {
     }
 
     public int getFinalKills() {
-        return (int) internalApiMap.computeIfAbsent("final_kills", (k) -> get("final_kills_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("final_kills", (k) -> get(0, "final_kills_bedwars"));
     }
 
     public int getFinalDeaths() {
-        return (int) internalApiMap.computeIfAbsent("final_deaths", (k) -> get("final_deaths_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("final_deaths", (k) -> get(0, "final_deaths_bedwars"));
     }
 
     public double getFKDR() {
@@ -54,11 +54,11 @@ public class BedwarsAPI extends SubApi {
     }
 
     public int getKills() {
-        return (int) internalApiMap.computeIfAbsent("kills", (k) -> get("kills_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("kills", (k) -> get(0, "kills_bedwars"));
     }
 
     public int getDeaths() {
-        return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get("deaths_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get(0, "deaths_bedwars"));
     }
 
     public double getKDR() {
@@ -68,11 +68,11 @@ public class BedwarsAPI extends SubApi {
     }
 
     public int getBedsBroken() {
-        return (int) internalApiMap.computeIfAbsent("beds_broken", (k) -> get("beds_broken_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("beds_broken", (k) -> get(0, "beds_broken_bedwars"));
     }
 
     public int getBedsLost() {
-        return (int) internalApiMap.computeIfAbsent("beds_lost", (k) -> get("beds_lost_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("beds_lost", (k) -> get(0, "beds_lost_bedwars"));
     }
 
     public double getBBLR() {
@@ -84,7 +84,7 @@ public class BedwarsAPI extends SubApi {
     private static final int XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + (5000 * 96); //487000
 
     public int getXp() {
-        return (int) internalApiMap.computeIfAbsent("xp", (k) -> get("Experience"));
+        return (int) internalApiMap.computeIfAbsent("xp", (k) -> get(0, "Experience"));
     }
 
     public int getLevel() {
@@ -240,7 +240,7 @@ public class BedwarsAPI extends SubApi {
 
     public String[] getHotbar() {
         return (String[]) internalApiMap.computeIfAbsent("hotbar", (k) -> {
-            String favorites = (String) get("favorite_slots");
+            String favorites = get(null,"favorite_slots");
             if (favorites == null) return new String[0];
             return favorites.split(",");
         });

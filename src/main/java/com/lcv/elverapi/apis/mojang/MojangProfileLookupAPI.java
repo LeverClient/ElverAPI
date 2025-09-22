@@ -33,10 +33,10 @@ public class MojangProfileLookupAPI extends Api {
     }
 
     public String getName() {
-        return (String) internalApiMap.computeIfAbsent("name", (k) -> get("name"));
+        return (String) internalApiMap.computeIfAbsent("name", (k) -> get(null, "name"));
     }
 
     public String getUUID() {
-        return (String) internalApiMap.computeIfAbsent("uuid", (k) -> get("id"));
+        return (String) internalApiMap.computeIfAbsent("uuid", (k) -> get(null, "id"));
     }
 }

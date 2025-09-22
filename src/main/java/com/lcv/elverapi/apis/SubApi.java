@@ -13,13 +13,13 @@ public abstract class SubApi extends ApiReader {
         this.prefix = prefix;
         this.indexPrefix = prefix.endsWith(".") ? prefix : prefix + ".";
     }
-    public Object get(String... keys) {
+    public <T> T get(T defaultValue, String... keys) {
         String[] prefixedKeys = new String[keys.length];
         for (int i = 0; i < prefixedKeys.length; i++) {
             prefixedKeys[i] = indexPrefix + keys[i];
         }
 
-        return parent.get(prefixedKeys);
+        return parent.get(defaultValue, prefixedKeys);
     }
 
     public boolean exists() {

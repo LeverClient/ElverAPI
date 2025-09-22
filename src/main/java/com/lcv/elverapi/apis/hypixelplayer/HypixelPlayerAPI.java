@@ -21,9 +21,9 @@ public class HypixelPlayerAPI extends Api
         this.uuid = uuid;
         doHttp();
         this.jsonObject = new JSONObject(response.body());
-        this.noData = noData || (this.jsonObject = (JSONObject) get("player")) == null;
-        this.hasStats = get("stats") != null;
-        this.name = (String) get("displayname");
+        this.noData = noData || (this.jsonObject = get(null,"player")) == null;
+        this.hasStats = get(null,"stats") != null;
+        this.name = get(null,"displayname");
     }
 
     public String getRankFormatted()
@@ -31,8 +31,7 @@ public class HypixelPlayerAPI extends Api
         String rank = getRank();
         String plusCol = getPlusColor();
         String rankCol = getRankColor();
-
-        return (String) internalApiMap.computeIfAbsent("rank_minecraft", (k) -> formatRank(rank, plusCol, rankCol, (String) get("prefix")));
+        return (String) internalApiMap.computeIfAbsent("rank_minecraft", (k) -> formatRank(rank, plusCol, rankCol, get(null, "prefix")));
     }
 
     public boolean hasStats()
@@ -40,25 +39,15 @@ public class HypixelPlayerAPI extends Api
         return hasStats;
     }
 
-    public long getExperience()
+    public int getExperience()
     {
-        return (long) internalApiMap.computeIfAbsent("exp", (k) ->
-        {
-            Object xp = get("networkExp");
-
-            if (xp instanceof Number num)
-            {
-                return num.longValue();
-            }
-
-            return xp;
-        });
+        int xp = get(0, "networkExp");
+        return (int) internalApiMap.computeIfAbsent("exp", (k) -> xp);
     }
 
     public double getLevel()
     {
         long xp = getExperience();
-
         return (double) internalApiMap.computeIfAbsent("level", (k) -> (1 + ((Math.sqrt(8750 * 8750 + 5000 * ((double) xp)) - 8750) / 2500)));
     }
 
@@ -66,26 +55,24 @@ public class HypixelPlayerAPI extends Api
     {
         return (String) internalApiMap.computeIfAbsent("rank", (k) ->
         {
-            String rank = (String) get("rank", "monthlyPackageRank");
-            return andThen(rank == null || rank.equals("NONE") ? get("newPackageRank", "packageRank") : rank, "NONE");
+            String rank = get(null,"rank", "monthlyPackageRank");
+            return andThen(rank == null || rank.equals("NONE") ? get(null,"newPackageRank", "packageRank") : rank, "NONE");
         });
     }
 
     public String getPlusColor()
     {
-        return (String) internalApiMap.computeIfAbsent("plus_color", (k) -> andThen(get("rankPlusColor"), "Red"));
+        return (String) internalApiMap.computeIfAbsent("plus_color", (k) -> andThen(get(null,"rankPlusColor"), "Red"));
     }
 
     public String getRankColor()
     {
         String rank = getRank();
-
         return (String) internalApiMap.computeIfAbsent("rank_color", (k) ->
         {
-            String monthlyRank = (String) get("monthlyPackageRank");
+            String monthlyRank = get(null,"monthlyPackageRank");
             if (monthlyRank != null && !monthlyRank.equals("NONE"))
-                return get("monthlyRankColor");
-
+                return get(null,"monthlyRankColor");
             return colorLookup.get(rank);
         });
     }
@@ -93,7 +80,6 @@ public class HypixelPlayerAPI extends Api
     public String getNameFormatted()
     {
         String rankFormat = getRankFormatted();
-
         return (String) internalApiMap.computeIfAbsent("name_minecraft", (k) -> rankFormat + name);
     }
 

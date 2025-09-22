@@ -4,46 +4,55 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public abstract class ApiReader {
+public abstract class ApiReader
+{
     protected HashMap<String, Object> apiMap = new HashMap<>();
 
     protected HashMap<String, Object> internalApiMap = new HashMap<>();
 
     public JSONObject jsonObject;
 
-    public Object get(String... keys) {
+    public <T> T get(T defaultValue, String... keys)
+    {
         outerLoop:
-        for (String key : keys) {
-            if (apiMap.containsKey(key)) return apiMap.get(key);
+        for (String key : keys)
+        {
+            if (apiMap.containsKey(key))
+                return (T) apiMap.get(key);
 
             String[] split = key.split("\\.");
 
             JSONObject jsObj = jsonObject;
-            for (String innerKey : split) {
-                if (!jsObj.has(innerKey)) continue outerLoop;
-
+            for (String innerKey : split)
+            {
+                if (!jsObj.has(innerKey))
+                    continue outerLoop;
 
                 Object v = jsObj.opt(innerKey);
 
-                if (v instanceof JSONObject vJs) jsObj = vJs;
-                else {
+                if (v instanceof JSONObject vJs)
+                    jsObj = vJs;
+                else
+                {
                     apiMap.put(key, v);
-                    return v;
+                    return (T) v;
                 }
             }
 
-            if (jsObj == jsonObject) {
+            if (jsObj == jsonObject)
+            {
                 jsonObject = null;
             }
 
             apiMap.put(key, jsObj);
-            return jsObj;
+            return (T) jsObj;
         }
 
-        return null;
+        return defaultValue;
     }
 
-    public <T> T andThen(T x, T y) {
+    public <T> T andThen(T x, T y)
+    {
         return (x == null) ? y : x;
     }
 }
