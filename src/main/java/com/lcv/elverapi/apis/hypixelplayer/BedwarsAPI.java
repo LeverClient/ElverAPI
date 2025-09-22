@@ -170,7 +170,7 @@ public class BedwarsAPI extends SubApi {
 
     public String[] getQuickbuy() {
         return (String[]) internalApiMap.computeIfAbsent("quickbuy", (k) -> {
-            String favorites = (String) get("favourites_2");
+            String favorites = get(null,"favourites_2");
 
             if (favorites == null) return new String[0];
 

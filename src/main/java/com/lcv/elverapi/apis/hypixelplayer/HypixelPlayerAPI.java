@@ -46,10 +46,10 @@ public class HypixelPlayerAPI extends Api
         return (long) internalApiMap.computeIfAbsent("exp", (k) -> xp.longValue());
     }
 
-    public double getLevel()
+    public int getLevel()
     {
         long xp = getExperience();
-        return (double) internalApiMap.computeIfAbsent("level", (k) -> (1 + ((Math.sqrt(8750 * 8750 + 5000 * ((double) xp)) - 8750) / 2500)));
+        return (int) internalApiMap.computeIfAbsent("level", (k) -> (int) (1 + ((Math.sqrt(8750 * 8750 + 5000 * ((double) xp)) - 8750) / 2500)));
     }
 
     public String getRank()
