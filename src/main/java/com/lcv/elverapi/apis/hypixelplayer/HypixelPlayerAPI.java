@@ -3,6 +3,7 @@ package com.lcv.elverapi.apis.hypixelplayer;
 import com.lcv.elverapi.apis.Api;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class HypixelPlayerAPI extends Api
@@ -39,10 +40,10 @@ public class HypixelPlayerAPI extends Api
         return hasStats;
     }
 
-    public int getExperience()
+    public long getExperience()
     {
-        int xp = get(0, "networkExp");
-        return (int) internalApiMap.computeIfAbsent("exp", (k) -> xp);
+        long xp = get(new BigDecimal(0), "networkExp").longValue();
+        return (long) internalApiMap.computeIfAbsent("exp", (k) -> xp);
     }
 
     public double getLevel()
