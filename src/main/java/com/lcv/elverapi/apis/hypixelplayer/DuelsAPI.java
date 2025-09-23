@@ -133,8 +133,8 @@ public class DuelsAPI extends SubApi
     public double getPrestigePercentage()
     {
         int wins = getWins();
-        int overflowWins = 0;
-        int presWinReq = 0;
+        int overflowWins = wins;
+        int presWinReq = PRESTIGE_WIN_LIST[0];
         for (int i = 0; i < PRESTIGE_LIST.length; i++)
         {
             if (wins < PRESTIGE_WIN_LIST[i])
@@ -197,8 +197,8 @@ public class DuelsAPI extends SubApi
     {
         int wins = getWins();
         int level = getLevel();
-        int overflowWins = 0;
-        int rankWinReq = 0;
+        int overflowWins = wins;
+        int rankWinReq = RANK_WIN_LIST[0];
         for (int i = 0; i < PRESTIGE_LIST.length; i++)
         {
             if (wins < PRESTIGE_WIN_LIST[i])
