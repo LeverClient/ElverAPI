@@ -7,29 +7,38 @@ import org.json.JSONObject;
 public class SkyblockAPI extends Api {
     private final String uuid;
     private final String apiKey;
-    private final JSONArray profiles;
-    private final String profile;
 
     public SkyblockAPI(String uuid, String apiKey)
-    {
-        new SkyblockAPI(uuid, apiKey, "");
-    }
-
-    public SkyblockAPI(String uuid, String apiKey, String profile)
     {
         this.uuid = uuid;
         this.apiKey = apiKey;
         doHttp();
         this.jsonObject = new JSONObject(response.body());
-        this.noData = (this.profiles = get(null,"profiles")) == null || noData;
-        if (!noData)
-        {
-
+        JSONArray profiles = get(null, "profiles");
+        this.noData = profiles == null || noData;
+        if (!noData) {
+            for (Object o : profiles) {
+                JSONObject json = (JSONObject) o;
+                if (json.getBoolean("selected")) {
+                    this.jsonObject = json;
+                    break;
+                }
+            }
         }
     }
 
     public String getUuid() {
         return uuid;
+    }
+
+    public String getUuidNoHyphen()
+    {
+        StringBuilder str = new StringBuilder();
+        for (String s : uuid.split("-"))
+        {
+            str.append(s);
+        }
+        return str.toString();
     }
 
     public SBInventoryAPI getInventoryApi()
