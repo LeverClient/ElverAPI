@@ -20,5 +20,10 @@
             <artifactId>json</artifactId>
             <version>20250517</version>
         </dependency>
+        <dependency>
+            <groupId>me.nullicorn</groupId>
+            <artifactId>Nedit</artifactId>
+            <version>2.2.0</version>
+        </dependency>
     </dependencies>
 </project>
