@@ -31,16 +31,6 @@ public class SkyblockAPI extends Api {
         return uuid;
     }
 
-    public String getUuidNoHyphen()
-    {
-        StringBuilder str = new StringBuilder();
-        for (String s : uuid.split("-"))
-        {
-            str.append(s);
-        }
-        return str.toString();
-    }
-
     public SBInventoryAPI getInventoryApi()
     {
         return (SBInventoryAPI) internalApiMap.computeIfAbsent("api/inventory", (k) -> new SBInventoryAPI(this));

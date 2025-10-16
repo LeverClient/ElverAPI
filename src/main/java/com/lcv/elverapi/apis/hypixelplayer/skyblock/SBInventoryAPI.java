@@ -20,7 +20,7 @@ public class SBInventoryAPI extends SubApi
     {
         try
         {
-            System.out.println(s);
+            //System.out.println(s);
             return NBTReader.readBase64(s);
         }
         catch (IOException e)
@@ -75,7 +75,11 @@ public class SBInventoryAPI extends SubApi
     public SBItem[][] getStorage()
     {
         NBTCompound[] arr = getStorageNBT();
-        return Arrays.stream(arr).map(list -> list.getList("i").toArray(SBItem[]::new)).toArray(SBItem[][]::new);
+        return Arrays.stream(arr)
+                .map(nbt -> nbt.getList("i").stream()
+                        .map(o -> new SBItem((NBTCompound) o))
+                        .toArray(SBItem[]::new))
+                .toArray(SBItem[][]::new);
     }
     public SBItem[] getArmor()
     {
