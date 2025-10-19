@@ -13,90 +13,90 @@ public class DuelsAPI extends SubApi
 
     public int getWins()
     {
-        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get(0, "wins"));
+        return (int) internalApiMap.computeIfAbsent("wins", k -> get(0, "wins"));
     }
 
     public int getLosses()
     {
-        return (int) internalApiMap.computeIfAbsent("losses", (k) -> get(0, "losses"));
+        return (int) internalApiMap.computeIfAbsent("losses", k -> get(0, "losses"));
     }
 
     public double getWLR()
     {
         int wins = getWins();
         int losses = getLosses();
-        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> (double) wins / losses);
+        return (double) internalApiMap.computeIfAbsent("wlr", k -> (double) wins / losses);
     }
 
     public int getKills()
     {
-        return (int) internalApiMap.computeIfAbsent("kills", (k) -> get(0, "kills"));
+        return (int) internalApiMap.computeIfAbsent("kills", k -> get(0, "kills"));
     }
 
     public int getDeaths()
     {
-        return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get(0, "deaths"));
+        return (int) internalApiMap.computeIfAbsent("deaths", k -> get(0, "deaths"));
     }
 
     public double getKDR()
     {
         int kills = getKills();
         int deaths = getDeaths();
-        return (double) internalApiMap.computeIfAbsent("kdr", (k) -> (double) kills / deaths);
+        return (double) internalApiMap.computeIfAbsent("kdr", k -> (double) kills / deaths);
     }
 
     public int getBowShot()
     {
-        return (int) internalApiMap.computeIfAbsent("bow_shot", (k) -> get(0, "bow_shots"));
+        return (int) internalApiMap.computeIfAbsent("bow_shot", k -> get(0, "bow_shots"));
     }
 
     public int getBowHit()
     {
-        return (int) internalApiMap.computeIfAbsent("bow_hit", (k) -> get(0, "bow_hits"));
+        return (int) internalApiMap.computeIfAbsent("bow_hit", k -> get(0, "bow_hits"));
     }
 
     public double getBowAccuracy()
     {
         int bowHit = getBowHit();
         int bowShot = getBowShot();
-        return (double) internalApiMap.computeIfAbsent("bow_accuracy", (k) -> (double) bowHit / bowShot * 100);
+        return (double) internalApiMap.computeIfAbsent("bow_accuracy", k -> (double) bowHit / bowShot * 100);
     }
 
     public int getSwordSwung()
     {
-        return (int) internalApiMap.computeIfAbsent("sword_swing", (k) -> get(0, "melee_swings"));
+        return (int) internalApiMap.computeIfAbsent("sword_swing", k -> get(0, "melee_swings"));
     }
 
     public int getSwordHit()
     {
-        return (int) internalApiMap.computeIfAbsent("sword_hit", (k) -> get(0, "melee_hits"));
+        return (int) internalApiMap.computeIfAbsent("sword_hit", k -> get(0, "melee_hits"));
     }
 
     public double getSwordAccuracy()
     {
         int swordHit = getSwordHit();
         int swordSwung = getSwordSwung();
-        return (double) internalApiMap.computeIfAbsent("sword_accuracy", (k) -> (double) swordHit / swordSwung * 100);
+        return (double) internalApiMap.computeIfAbsent("sword_accuracy", k -> (double) swordHit / swordSwung * 100);
     }
 
     public int getHealthHealed()
     {
-        return (int) internalApiMap.computeIfAbsent("health_healed", (k) -> get(0, "health_regenerated"));
+        return (int) internalApiMap.computeIfAbsent("health_healed", k -> get(0, "health_regenerated"));
     }
 
     public int getDamageDealt()
     {
-        return (int) internalApiMap.computeIfAbsent("damage_dealt", (k) -> get(0, "damage_dealt"));
+        return (int) internalApiMap.computeIfAbsent("damage_dealt", k -> get(0, "damage_dealt"));
     }
 
     public int getCoins()
     {
-        return (int) internalApiMap.computeIfAbsent("coins", (k) -> get(0, "coins"));
+        return (int) internalApiMap.computeIfAbsent("coins", k -> get(0, "coins"));
     }
 
     public int getPingPreference()
     {
-        return (int) internalApiMap.computeIfAbsent("ping_preference", (k) -> get(0, "pingPreference"));
+        return (int) internalApiMap.computeIfAbsent("ping_preference", k -> get(0, "pingPreference"));
     }
 
     public int getLevel()
@@ -107,7 +107,7 @@ public class DuelsAPI extends SubApi
         if (get(null, s) != null)
             level = get(0, s);
         final int finalLevel = level;
-        return (int) internalApiMap.computeIfAbsent("level", (k) -> finalLevel);
+        return (int) internalApiMap.computeIfAbsent("level", k -> finalLevel);
     }
 
     public String getPrestige()
@@ -121,13 +121,13 @@ public class DuelsAPI extends SubApi
                 break;
         }
         final String finalPrestige = prestige;
-        return (String) internalApiMap.computeIfAbsent("prestige", (k) -> finalPrestige);
+        return (String) internalApiMap.computeIfAbsent("prestige", k -> finalPrestige);
     }
 
     public String getPrestigeFormatted()
     {
         String prestige = getPrestige();
-        return (String) internalApiMap.computeIfAbsent("prestige_formatted", (k) -> formatRank(prestige));
+        return (String) internalApiMap.computeIfAbsent("prestige_formatted", k -> formatRank(prestige));
     }
 
     public double getPrestigePercentage()
@@ -143,7 +143,7 @@ public class DuelsAPI extends SubApi
             presWinReq = PRESTIGE_WIN_LIST[i + 1] - PRESTIGE_WIN_LIST[i];
         }
         double percentage = (double) overflowWins / presWinReq * 100;
-        return (double) internalApiMap.computeIfAbsent("prestige_percentage", (k) -> percentage);
+        return (double) internalApiMap.computeIfAbsent("prestige_percentage", k -> percentage);
     }
 
     public String getNextPrestige()
@@ -159,13 +159,13 @@ public class DuelsAPI extends SubApi
             }
         }
         final String finalNextPrestige = nextPrestige;
-        return (String) internalApiMap.computeIfAbsent("next_prestige", (k) -> finalNextPrestige);
+        return (String) internalApiMap.computeIfAbsent("next_prestige", k -> finalNextPrestige);
     }
 
     public String getNextPrestigeFormatted()
     {
         String nextPrestige = getNextPrestige();
-        return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", (k) -> formatRank(nextPrestige));
+        return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", k -> formatRank(nextPrestige));
     }
 
     public String getRank()
@@ -184,13 +184,13 @@ public class DuelsAPI extends SubApi
             }
         }
         final String finalRank = rank.toString();
-        return (String) internalApiMap.computeIfAbsent("rank", (k) -> finalRank);
+        return (String) internalApiMap.computeIfAbsent("rank", k -> finalRank);
     }
 
     public String getRankFormatted()
     {
         String rank = getRank();
-        return (String) internalApiMap.computeIfAbsent("rank_formatted", (k) -> formatRank(rank));
+        return (String) internalApiMap.computeIfAbsent("rank_formatted", k -> formatRank(rank));
     }
 
     public double getRankPercentage()
@@ -208,12 +208,12 @@ public class DuelsAPI extends SubApi
         }
         overflowWins -= (level - 1) * rankWinReq;
         double percentage = (double) overflowWins / rankWinReq * 100;
-        return (double) internalApiMap.computeIfAbsent("rank_percentage", (k) -> percentage);
+        return (double) internalApiMap.computeIfAbsent("rank_percentage", k -> percentage);
     }
 
     public String[] getRecentlyPlayed()
     {
-        return (String[]) internalApiMap.computeIfAbsent("recent_played", (k) -> get("","duels_recently_played2").split("#"));
+        return (String[]) internalApiMap.computeIfAbsent("recent_played", k -> get("","duels_recently_played2").split("#"));
     }
 
     public static String formatRank(String rank)

@@ -33,7 +33,7 @@ public class SkyblockAPI extends Api {
 
     public SBInventoryAPI getInventoryApi()
     {
-        return (SBInventoryAPI) internalApiMap.computeIfAbsent("api/inventory", (k) -> new SBInventoryAPI(this));
+        return (SBInventoryAPI) internalApiMap.computeIfAbsent("api/inventory", k -> new SBInventoryAPI(this));
     }
 
     @Override

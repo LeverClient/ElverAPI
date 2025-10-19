@@ -9,6 +9,7 @@ public class SBItem
     private final boolean exists;
     private final String[] lore;
     private final NBTCompound attributes;
+    private final NBTCompound nbt;
 
     public SBItem(NBTCompound nbt)
     {
@@ -17,6 +18,7 @@ public class SBItem
         this.exists = !this.name.equals("EMPTY");
         this.lore = (exists) ? nbt.getList("tag.display.Lore").toArray(String[]::new) : null;
         this.attributes = (exists) ? nbt.getCompound("tag.ExtraAttributes") : null;
+        this.nbt = nbt;
     }
 
     public String getName()
@@ -38,5 +40,9 @@ public class SBItem
     public NBTCompound getAttributes()
     {
         return attributes;
+    }
+    public NBTCompound getNbt()
+    {
+        return nbt;
     }
 }

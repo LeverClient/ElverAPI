@@ -10,91 +10,91 @@ public class BedwarsAPI extends SubApi {
     }
 
     public int getIron() {
-        return (int) internalApiMap.computeIfAbsent("iron", (k) -> get(0, "iron_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("iron", k -> get(0, "iron_resources_collected_bedwars"));
     }
 
     public int getGold() {
-        return (int) internalApiMap.computeIfAbsent("gold", (k) -> get(0, "gold_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("gold", k -> get(0, "gold_resources_collected_bedwars"));
     }
 
     public int getDiamond() {
-        return (int) internalApiMap.computeIfAbsent("diamond", (k) -> get(0, "diamond_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("diamond", k -> get(0, "diamond_resources_collected_bedwars"));
     }
 
     public int getEmerald() {
-        return (int) internalApiMap.computeIfAbsent("emerald", (k) -> get(0, "emerald_resources_collected_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("emerald", k -> get(0, "emerald_resources_collected_bedwars"));
     }
 
     public int getWins() {
-        return (int) internalApiMap.computeIfAbsent("wins", (k) -> get(0, "wins_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("wins", k -> get(0, "wins_bedwars"));
     }
 
     public int getLosses() {
-        return (int) internalApiMap.computeIfAbsent("losses", (k) -> get(0,"losses_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("losses", k -> get(0,"losses_bedwars"));
     }
 
     public double getWLR() {
         int wins = getWins();
         int losses = getLosses();
-        return (double) internalApiMap.computeIfAbsent("wlr", (k) -> (double) wins / losses);
+        return (double) internalApiMap.computeIfAbsent("wlr", k -> (double) wins / losses);
     }
 
     public int getFinalKills() {
-        return (int) internalApiMap.computeIfAbsent("final_kills", (k) -> get(0, "final_kills_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("final_kills", k -> get(0, "final_kills_bedwars"));
     }
 
     public int getFinalDeaths() {
-        return (int) internalApiMap.computeIfAbsent("final_deaths", (k) -> get(0, "final_deaths_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("final_deaths", k -> get(0, "final_deaths_bedwars"));
     }
 
     public double getFKDR() {
         int finalKills = getFinalKills();
         int finalDeaths = getFinalDeaths();
-        return (double) internalApiMap.computeIfAbsent("fkdr", (k) -> (double) finalKills / finalDeaths);
+        return (double) internalApiMap.computeIfAbsent("fkdr", k -> (double) finalKills / finalDeaths);
     }
 
     public int getKills() {
-        return (int) internalApiMap.computeIfAbsent("kills", (k) -> get(0, "kills_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("kills", k -> get(0, "kills_bedwars"));
     }
 
     public int getDeaths() {
-        return (int) internalApiMap.computeIfAbsent("deaths", (k) -> get(0, "deaths_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("deaths", k -> get(0, "deaths_bedwars"));
     }
 
     public double getKDR() {
         int kills = getKills();
         int deaths = getDeaths();
-        return (double) internalApiMap.computeIfAbsent("kdr", (k) -> (double) kills / deaths);
+        return (double) internalApiMap.computeIfAbsent("kdr", k -> (double) kills / deaths);
     }
 
     public int getBedsBroken() {
-        return (int) internalApiMap.computeIfAbsent("beds_broken", (k) -> get(0, "beds_broken_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("beds_broken", k -> get(0, "beds_broken_bedwars"));
     }
 
     public int getBedsLost() {
-        return (int) internalApiMap.computeIfAbsent("beds_lost", (k) -> get(0, "beds_lost_bedwars"));
+        return (int) internalApiMap.computeIfAbsent("beds_lost", k -> get(0, "beds_lost_bedwars"));
     }
 
     public double getBBLR() {
         int bedsBroken = getBedsBroken();
         int bedsLost = getBedsLost();
-        return (double) internalApiMap.computeIfAbsent("bblr", (k) -> (double) bedsBroken / bedsLost);
+        return (double) internalApiMap.computeIfAbsent("bblr", k -> (double) bedsBroken / bedsLost);
     }
 
     private static final int XP_PER_PRESTIGE = 500 + 1000 + 2000 + 3500 + (5000 * 96); //487000
 
     public int getXp() {
-        return (int) internalApiMap.computeIfAbsent("xp", (k) -> get(0, "Experience"));
+        return (int) internalApiMap.computeIfAbsent("xp", k -> get(0, "Experience"));
     }
 
     public int getLevel() {
         int xp = getXp();
-        return (int) internalApiMap.computeIfAbsent("level", (k) -> calculateLevel(xp));
+        return (int) internalApiMap.computeIfAbsent("level", k -> calculateLevel(xp));
     }
 
     public String getLevelFormatted() {
         int level = getLevel();
-        return (String) internalApiMap.computeIfAbsent("level_formatted", (k) -> formatRank(level));
+        return (String) internalApiMap.computeIfAbsent("level_formatted", k -> formatRank(level));
     }
 
     public double getLevelPercentage() {
@@ -110,7 +110,7 @@ public class BedwarsAPI extends SubApi {
             default -> 5000;
         };
         double percentage = (double) overflowXp / xpRequirement * 100;
-        return (double) internalApiMap.computeIfAbsent("level_percentage", (k) -> percentage);
+        return (double) internalApiMap.computeIfAbsent("level_percentage", k -> percentage);
     }
 
     public static int calculateLevel(int xp) {
@@ -151,12 +151,12 @@ public class BedwarsAPI extends SubApi {
 
     public int getNextPrestige() {
         int nextPrestige = ((getLevel() / 100) + 1) * 100;
-        return (int) internalApiMap.computeIfAbsent("next_prestige", (k) -> nextPrestige);
+        return (int) internalApiMap.computeIfAbsent("next_prestige", k -> nextPrestige);
     }
 
     public String getNextPrestigeFormatted() {
         int nextPrestige = getNextPrestige();
-        return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", (k) -> formatRank(nextPrestige));
+        return (String) internalApiMap.computeIfAbsent("next_prestige_formatted", k -> formatRank(nextPrestige));
     }
 
     public double getPrestigePercentage() {
@@ -165,11 +165,11 @@ public class BedwarsAPI extends SubApi {
         int prestige = (level / 100) * 100;
         int overflowXp = xp - calculateXp(prestige);
         double percentage = (double) overflowXp / XP_PER_PRESTIGE * 100;
-        return (double) internalApiMap.computeIfAbsent("prestige_percentage", (k) -> percentage);
+        return (double) internalApiMap.computeIfAbsent("prestige_percentage", k -> percentage);
     }
 
     public String[] getQuickbuy() {
-        return (String[]) internalApiMap.computeIfAbsent("quickbuy", (k) -> {
+        return (String[]) internalApiMap.computeIfAbsent("quickbuy", k -> {
             String favorites = get(null,"favourites_2");
 
             if (favorites == null) return new String[0];
@@ -239,7 +239,7 @@ public class BedwarsAPI extends SubApi {
     }
 
     public String[] getHotbar() {
-        return (String[]) internalApiMap.computeIfAbsent("hotbar", (k) -> {
+        return (String[]) internalApiMap.computeIfAbsent("hotbar", k -> {
             String favorites = get(null,"favorite_slots");
             if (favorites == null) return new String[0];
             return favorites.split(",");

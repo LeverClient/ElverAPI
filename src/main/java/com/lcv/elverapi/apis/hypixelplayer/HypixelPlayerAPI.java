@@ -32,7 +32,7 @@ public class HypixelPlayerAPI extends Api
         String rank = getRank();
         String plusCol = getPlusColor();
         String rankCol = getRankColor();
-        return (String) internalApiMap.computeIfAbsent("rank_minecraft", (k) -> formatRank(rank, plusCol, rankCol, get(null, "prefix")));
+        return (String) internalApiMap.computeIfAbsent("rank_minecraft", k -> formatRank(rank, plusCol, rankCol, get(null, "prefix")));
     }
 
     public boolean hasStats()
@@ -43,18 +43,18 @@ public class HypixelPlayerAPI extends Api
     public long getExperience()
     {
         Number xp = get(0, "networkExp");
-        return (long) internalApiMap.computeIfAbsent("exp", (k) -> xp.longValue());
+        return (long) internalApiMap.computeIfAbsent("exp", k -> xp.longValue());
     }
 
     public int getLevel()
     {
         long xp = getExperience();
-        return (int) internalApiMap.computeIfAbsent("level", (k) -> (int) (1 + ((Math.sqrt(8750 * 8750 + 5000 * ((double) xp)) - 8750) / 2500)));
+        return (int) internalApiMap.computeIfAbsent("level", k -> (int) (1 + ((Math.sqrt(8750 * 8750 + 5000 * ((double) xp)) - 8750) / 2500)));
     }
 
     public String getRank()
     {
-        return (String) internalApiMap.computeIfAbsent("rank", (k) ->
+        return (String) internalApiMap.computeIfAbsent("rank", k ->
         {
             String rank = get(null,"rank", "monthlyPackageRank");
             return andThen(rank == null || rank.equals("NONE") ? get(null,"newPackageRank", "packageRank") : rank, "NONE");
@@ -63,13 +63,13 @@ public class HypixelPlayerAPI extends Api
 
     public String getPlusColor()
     {
-        return (String) internalApiMap.computeIfAbsent("plus_color", (k) -> andThen(get(null,"rankPlusColor"), "Red"));
+        return (String) internalApiMap.computeIfAbsent("plus_color", k -> andThen(get(null,"rankPlusColor"), "Red"));
     }
 
     public String getRankColor()
     {
         String rank = getRank();
-        return (String) internalApiMap.computeIfAbsent("rank_color", (k) ->
+        return (String) internalApiMap.computeIfAbsent("rank_color", k ->
         {
             String monthlyRank = get(null,"monthlyPackageRank");
             if (monthlyRank != null && !monthlyRank.equals("NONE"))
@@ -81,7 +81,7 @@ public class HypixelPlayerAPI extends Api
     public String getNameFormatted()
     {
         String rankFormat = getRankFormatted();
-        return (String) internalApiMap.computeIfAbsent("name_minecraft", (k) -> rankFormat + name);
+        return (String) internalApiMap.computeIfAbsent("name_minecraft", k -> rankFormat + name);
     }
 
     public String getUUID()
@@ -97,12 +97,12 @@ public class HypixelPlayerAPI extends Api
 
     public BedwarsAPI getBedwarsApi()
     {
-        return (BedwarsAPI) internalApiMap.computeIfAbsent("api/bedwars", (k) -> new BedwarsAPI(this));
+        return (BedwarsAPI) internalApiMap.computeIfAbsent("api/bedwars", k -> new BedwarsAPI(this));
     }
 
     public DuelsAPI getDuelsApi()
     {
-        return (DuelsAPI) internalApiMap.computeIfAbsent("api/duels", (k) -> new DuelsAPI(this));
+        return (DuelsAPI) internalApiMap.computeIfAbsent("api/duels", k -> new DuelsAPI(this));
     }
 
     public static String formatRank(String rank, String plusColor, String rankColor, String prefix)
