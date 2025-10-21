@@ -36,6 +36,11 @@ public class SkyblockAPI extends Api {
         return (SBInventoryAPI) internalApiMap.computeIfAbsent("api/inventory", k -> new SBInventoryAPI(this));
     }
 
+    public SBDungeonsAPI getDungeonsApi()
+    {
+        return (SBDungeonsAPI) internalApiMap.computeIfAbsent("api/dungeons", k -> new SBDungeonsAPI(this));
+    }
+
     @Override
     public String getApiEndpoint() {
         return "https://api.hypixel.net/v2/skyblock/profiles?key=" + apiKey + "&uuid=" + uuid;

@@ -22,7 +22,6 @@ public class SBInventoryAPI extends SubApi
     {
         try
         {
-            System.out.println(s);
             return NBTReader.readBase64(s);
         }
         catch (IOException e)
@@ -63,6 +62,10 @@ public class SBInventoryAPI extends SubApi
     public NBTCompound getTalismanBagNBT()
     {
         return (NBTCompound) internalApiMap.computeIfAbsent("talisman_bag", k -> parseBase64(get(null, "bag_contents.talisman_bag.data")));
+    }
+    public NBTCompound getSackBagNBT()
+    {
+        return (NBTCompound) internalApiMap.computeIfAbsent("sack_bag", k -> parseBase64(get(null, "bag_contents.sacks_bag.data")));
     }
 
     public SBItem[] getHotbar()
@@ -114,6 +117,13 @@ public class SBInventoryAPI extends SubApi
     public SBItem[] getTalismanBag()
     {
         NBTList list = getTalismanBagNBT().getList("i");
+        return list.stream()
+                .map(nbt -> new SBItem((NBTCompound) nbt))
+                .toArray(SBItem[]::new);
+    }
+    public SBItem[] getSackBag()
+    {
+        NBTList list = getSackBagNBT().getList("i");
         return list.stream()
                 .map(nbt -> new SBItem((NBTCompound) nbt))
                 .toArray(SBItem[]::new);
