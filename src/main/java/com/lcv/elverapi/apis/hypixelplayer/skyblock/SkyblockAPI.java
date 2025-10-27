@@ -41,6 +41,24 @@ public class SkyblockAPI extends Api {
         return (SBDungeonsAPI) internalApiMap.computeIfAbsent("api/dungeons", k -> new SBDungeonsAPI(this));
     }
 
+    public SBPlayerStatsAPI getPlayerStatsApi()
+    {
+        return (SBPlayerStatsAPI) internalApiMap.computeIfAbsent("api/player_stats", k -> new SBPlayerStatsAPI(this));
+    }
+
+    public SBGearAPI getGearApi()
+    {
+        return (SBGearAPI) internalApiMap.computeIfAbsent("api/pets", k -> new SBGearAPI(this));
+    }
+    public SBAccessoryAPI getAccessoryApi()
+    {
+        return (SBAccessoryAPI) internalApiMap.computeIfAbsent("api/accessory", k -> new SBAccessoryAPI(this));
+    }
+    public SBPetAPI getPetApi()
+    {
+        return (SBPetAPI) internalApiMap.computeIfAbsent("api/pets", k -> new SBPetAPI(this));
+    }
+
     @Override
     public String getApiEndpoint() {
         return "https://api.hypixel.net/v2/skyblock/profiles?key=" + apiKey + "&uuid=" + uuid;
