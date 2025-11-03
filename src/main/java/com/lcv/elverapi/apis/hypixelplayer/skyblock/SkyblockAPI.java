@@ -1,6 +1,7 @@
 package com.lcv.elverapi.apis.hypixelplayer.skyblock;
 
 import com.lcv.elverapi.apis.Api;
+import com.lcv.elverapi.apis.hypixelplayer.skyblock.api.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,21 +32,10 @@ public class SkyblockAPI extends Api {
         return uuid;
     }
 
-    public SBInventoryAPI getInventoryApi()
-    {
-        return (SBInventoryAPI) internalApiMap.computeIfAbsent("api/inventory", k -> new SBInventoryAPI(this));
-    }
-
-    public SBDungeonsAPI getDungeonsApi()
-    {
-        return (SBDungeonsAPI) internalApiMap.computeIfAbsent("api/dungeons", k -> new SBDungeonsAPI(this));
-    }
-
     public SBPlayerStatsAPI getPlayerStatsApi()
     {
         return (SBPlayerStatsAPI) internalApiMap.computeIfAbsent("api/player_stats", k -> new SBPlayerStatsAPI(this));
     }
-
     public SBGearAPI getGearApi()
     {
         return (SBGearAPI) internalApiMap.computeIfAbsent("api/pets", k -> new SBGearAPI(this));
@@ -57,6 +47,19 @@ public class SkyblockAPI extends Api {
     public SBPetAPI getPetApi()
     {
         return (SBPetAPI) internalApiMap.computeIfAbsent("api/pets", k -> new SBPetAPI(this));
+    }
+    public SBInventoryAPI getInventoryApi()
+    {
+        return (SBInventoryAPI) internalApiMap.computeIfAbsent("api/inventory", k -> new SBInventoryAPI(this));
+    }
+    // todo: finish this once foraging api is added
+    public Object getSkillsApi()
+    {
+        return null;
+    }
+    public SBDungeonsAPI getDungeonsApi()
+    {
+        return (SBDungeonsAPI) internalApiMap.computeIfAbsent("api/dungeons", k -> new SBDungeonsAPI(this));
     }
 
     @Override

@@ -1,6 +1,8 @@
-package com.lcv.elverapi.apis.hypixelplayer.skyblock;
+package com.lcv.elverapi.apis.hypixelplayer.skyblock.api;
 
 import com.lcv.elverapi.apis.SubApi;
+import com.lcv.elverapi.apis.hypixelplayer.skyblock.SkyblockAPI;
+import com.lcv.elverapi.apis.hypixelplayer.skyblock.util.SBItem;
 import me.nullicorn.nedit.NBTReader;
 import me.nullicorn.nedit.type.NBTCompound;
 

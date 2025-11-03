@@ -1,6 +1,5 @@
-package com.lcv.elverapi.apis.hypixelplayer.skyblock;
+package com.lcv.elverapi.apis.hypixelplayer.skyblock.util;
 
-import me.nullicorn.nedit.type.NBTCompound;
 import org.json.JSONObject;
 
 public class SBPet

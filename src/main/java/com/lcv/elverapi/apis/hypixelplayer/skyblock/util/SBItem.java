@@ -1,4 +1,4 @@
-package com.lcv.elverapi.apis.hypixelplayer.skyblock;
+package com.lcv.elverapi.apis.hypixelplayer.skyblock.util;
 
 import me.nullicorn.nedit.type.NBTCompound;
 
@@ -44,5 +44,10 @@ public class SBItem
     public NBTCompound getNbt()
     {
         return nbt;
+    }
+    @Override
+    public String toString()
+    {
+        return name + " " + id;
     }
 }

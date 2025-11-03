@@ -1,6 +1,8 @@
-package com.lcv.elverapi.apis.hypixelplayer.skyblock;
+package com.lcv.elverapi.apis.hypixelplayer.skyblock.api;
 
 import com.lcv.elverapi.apis.SubApi;
+import com.lcv.elverapi.apis.hypixelplayer.skyblock.SkyblockAPI;
+import com.lcv.elverapi.apis.hypixelplayer.skyblock.util.SBItem;
 import me.nullicorn.nedit.NBTReader;
 import me.nullicorn.nedit.type.NBTCompound;
 import me.nullicorn.nedit.type.NBTList;
@@ -8,12 +10,14 @@ import me.nullicorn.nedit.type.NBTList;
 import java.io.IOException;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("ConstantConditions")
 public class SBGearAPI extends SubApi
 {
     public SBGearAPI(SkyblockAPI parent)
     {
         super(parent, "members." + parent.getUuid() + ".inventory");
     }
+
     private static NBTCompound parseBase64(String s)
     {
         try
@@ -26,7 +30,6 @@ public class SBGearAPI extends SubApi
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     public SBItem[] getArmor()
     {
         return (SBItem[]) internalApiMap.computeIfAbsent("armor", k -> {
@@ -36,7 +39,6 @@ public class SBGearAPI extends SubApi
                     .toArray(SBItem[]::new);
         });
     }
-    @SuppressWarnings("ConstantConditions")
     public SBItem[] getEquipment()
     {
         return (SBItem[]) internalApiMap.computeIfAbsent("equipment", k -> {
@@ -46,7 +48,6 @@ public class SBGearAPI extends SubApi
                     .toArray(SBItem[]::new);
         });
     }
-    @SuppressWarnings("ConstantConditions")
     public SBItem[][] getWardrobe()
     {
         return (SBItem[][]) internalApiMap.computeIfAbsent("wardrobe", k -> {
