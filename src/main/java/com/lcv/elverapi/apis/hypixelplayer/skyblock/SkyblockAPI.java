@@ -5,6 +5,10 @@ import com.lcv.elverapi.apis.hypixelplayer.skyblock.api.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 public class SkyblockAPI extends Api {
     private final String uuid;
     private final String apiKey;

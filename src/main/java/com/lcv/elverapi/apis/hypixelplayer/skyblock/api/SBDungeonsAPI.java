@@ -67,11 +67,34 @@ public class SBDungeonsAPI extends SubApi
         return (int) internalApiMap.computeIfAbsent("secrets", k -> get(-1, "secrets"));
     }
 
+    public SBDungeon[] getNormalDungeons()
+    {
+        return (SBDungeon[]) internalApiMap.computeIfAbsent("normal_dungeons", k ->
+                IntStream
+                        .range(0, 8)
+                        .mapToObj(i -> {
+                            String prefix = "dungeon_types.catacombs.";
+                            int runs = get(-1, prefix + "times_played." + i);
+                            int tier = get(-1, prefix + "tier_completions." + i);
+                            int milestone = get(-1, prefix + "milestone_completions." + i);
+                            int mobs = get(-1, prefix + "mobs_killed." + i);
+                            int score = get(-1, prefix + "best_score." + i);
+                            int watcher = get(-1, prefix + "watcher_kills." + i);
+                            int mostMobs = get(-1, prefix + "most_mobs_killed." + i);
+                            int time = get(-1, prefix + "fastest_time." + i);
+                            int timeS = get(-1, prefix + "fastest_time_s." + i);
+                            int timeSPlus = get(-1, prefix + "fastest_time_s_plus." + i);
+                            int healing = get(-1, prefix + "most_healing." + i);
+                            int damage = -1;
+                            String damageClass = "NONE";
+                            String[] classes = {""};
+                        })
+                        .toArray(SBDungeon[]::new));
+    }
     public SBDungeon getEntrance()
     {
-        return (int) internalApiMap.computeIfAbsent("entrance", k -> {
-            int runs = get(-1, "dungeon_types.catacombs.times_played.0");
-        });
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[0]);
     }
 
     public int[] getRuns()
