@@ -54,9 +54,9 @@ public class SBDungeonsAPI extends SubApi
             default -> "UNKNOWN";
         });
     }
-    public int getHighestCatacombsFloor()
+    public int getHighestNormalFloor()
     {
-        return (int) internalApiMap.computeIfAbsent("highest_catacombs_floor", k -> get(-1, "dungeon_types.catacombs.highest_tier_completed"));
+        return (int) internalApiMap.computeIfAbsent("highest_normal_floor", k -> get(-1, "dungeon_types.catacombs.highest_tier_completed"));
     }
     public int getHighestMasterFloor()
     {
@@ -87,7 +87,25 @@ public class SBDungeonsAPI extends SubApi
                             int healing = get(-1, prefix + "most_healing." + i);
                             int damage = -1;
                             String damageClass = "NONE";
-                            String[] classes = {""};
+                            String[] classes = {"archer", "berserk", "healer", "mage", "tank"};
+                            for (String str : classes)
+                            {
+                                int num = get(-1, prefix + "most_damage_" + str + "." + i);
+                                if (num > damage)
+                                {
+                                    damage = num;
+                                    damageClass = switch (str)
+                                    {
+                                        case "archer" -> "Archer";
+                                        case "berserk" -> "Berserker";
+                                        case "healer" -> "Healer";
+                                        case "mage" -> "Mage";
+                                        case "tank" -> "Tank";
+                                        default -> "UNKNOWN";
+                                    };
+                                }
+                            }
+                            return new SBDungeon(i, false, runs, tier, milestone, mobs, score, watcher, mostMobs, time, timeS, timeSPlus, healing, damage, damageClass);
                         })
                         .toArray(SBDungeon[]::new));
     }
@@ -96,36 +114,117 @@ public class SBDungeonsAPI extends SubApi
         SBDungeon[] floors = getNormalDungeons();
         return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[0]);
     }
-
-    public int[] getRuns()
+    public SBDungeon getFloorOne()
     {
-        return (int[]) internalApiMap.computeIfAbsent("runs", k -> IntStream.range(0, 8)
-                .map(i -> get(BigDecimal.valueOf(-1), "dungeon_types.catacombs.times_played." + i).intValue())
-                .toArray());
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("floor_one", k -> floors[1]);
+    }
+    public SBDungeon getFloorTwo()
+    {
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[2]);
+    }
+    public SBDungeon getFloorThree()
+    {
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[3]);
+    }
+    public SBDungeon getFloorFour()
+    {
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[4]);
+    }
+    public SBDungeon getFloorFive()
+    {
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[5]);
+    }
+    public SBDungeon getFloorSix()
+    {
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[6]);
+    }
+    public SBDungeon getFloorSeven()
+    {
+        SBDungeon[] floors = getNormalDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("entrance", k -> floors[7]);
     }
 
-    public int[] getBestScores()
+    public SBDungeon[] getMasterDungeons()
     {
-        return (int[]) internalApiMap.computeIfAbsent("best_scores", k -> IntStream.range(0, 8)
-                .map(i -> get(BigDecimal.valueOf(-1), "dungeon_types.catacombs.best_score." + i).intValue())
-                .toArray());
+        return (SBDungeon[]) internalApiMap.computeIfAbsent("master_dungeons", k ->
+                IntStream
+                        .range(1, 8)
+                        .mapToObj(i -> {
+                            String prefix = "dungeon_types.catacombs.";
+                            int runs = get(-1, prefix + "times_played." + i);
+                            int tier = get(-1, prefix + "tier_completions." + i);
+                            int milestone = get(-1, prefix + "milestone_completions." + i);
+                            int mobs = get(-1, prefix + "mobs_killed." + i);
+                            int score = get(-1, prefix + "best_score." + i);
+                            int watcher = get(-1, prefix + "watcher_kills." + i);
+                            int mostMobs = get(-1, prefix + "most_mobs_killed." + i);
+                            int time = get(-1, prefix + "fastest_time." + i);
+                            int timeS = get(-1, prefix + "fastest_time_s." + i);
+                            int timeSPlus = get(-1, prefix + "fastest_time_s_plus." + i);
+                            int healing = get(-1, prefix + "most_healing." + i);
+                            int damage = -1;
+                            String damageClass = "NONE";
+                            String[] classes = {"archer", "berserk", "healer", "mage", "tank"};
+                            for (String str : classes)
+                            {
+                                int num = get(-1, prefix + "most_damage_" + str + "." + i);
+                                if (num > damage)
+                                {
+                                    damage = num;
+                                    damageClass = switch (str)
+                                    {
+                                        case "archer" -> "Archer";
+                                        case "berserk" -> "Berserker";
+                                        case "healer" -> "Healer";
+                                        case "mage" -> "Mage";
+                                        case "tank" -> "Tank";
+                                        default -> "UNKNOWN";
+                                    };
+                                }
+                            }
+                            return new SBDungeon(i, true, runs, tier, milestone, mobs, score, watcher, mostMobs, time, timeS, timeSPlus, healing, damage, damageClass);
+                        })
+                        .toArray(SBDungeon[]::new));
     }
-    public int[] getTotalMobsKilled()
+    public SBDungeon getMasterFloorOne()
     {
-        return (int[]) internalApiMap.computeIfAbsent("total_mobs_killed", k -> IntStream.range(0, 8)
-                .map(i -> get(BigDecimal.valueOf(-1), "dungeon_types.catacombs.mobs_killed." + i).intValue())
-                .toArray());
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_one", k -> floors[0]);
     }
-    public int[] getMostMobsKilled()
+    public SBDungeon getMasterFloorTwo()
     {
-        return (int[]) internalApiMap.computeIfAbsent("most_mobs_killed", k -> IntStream.range(0, 8)
-                .map(i -> get(BigDecimal.valueOf(-1), "dungeon_types.catacombs.most_mobs_killed." + i).intValue())
-                .toArray());
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_two", k -> floors[1]);
     }
-    public int[] getMostDamageMage()
+    public SBDungeon getMasterFloorThree()
     {
-        return (int[]) internalApiMap.computeIfAbsent("most_damage_mage", k -> IntStream.range(0, 8)
-                .map(i -> get(BigDecimal.valueOf(-1), "dungeon_types.catacombs.most_damage_mage." + i).intValue())
-                .toArray());
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_three", k -> floors[2]);
+    }
+    public SBDungeon getMasterFloorFour()
+    {
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_four", k -> floors[3]);
+    }
+    public SBDungeon getMasterFloorFive()
+    {
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_five", k -> floors[4]);
+    }
+    public SBDungeon getMasterFloorSix()
+    {
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_six", k -> floors[5]);
+    }
+    public SBDungeon getMasterFloorSeven()
+    {
+        SBDungeon[] floors = getMasterDungeons();
+        return (SBDungeon) internalApiMap.computeIfAbsent("master_floor_seven", k -> floors[6]);
     }
 }

@@ -2,6 +2,8 @@ package com.lcv.elverapi.apis.hypixelplayer.skyblock.util;
 
 public class SBDungeon
 {
+    public final int floorNumber;
+    public final boolean isMaster;
     public final int runs;
     public final int tier;
     public final int milestone;
@@ -16,8 +18,12 @@ public class SBDungeon
     public final int damage;
     public final String damageClass;
 
-    public SBDungeon(int runs, int tier, int milestone, int mobs, int score, int watcher, int mostMobs, int time, int timeS, int timeSPlus, int healing, int damage, String damageClass)
+    private final boolean exists;
+
+    public SBDungeon(int floorNumber, boolean isMaster, int runs, int tier, int milestone, int mobs, int score, int watcher, int mostMobs, int time, int timeS, int timeSPlus, int healing, int damage, String damageClass)
     {
+        this.floorNumber = floorNumber;
+        this.isMaster = isMaster;
         this.runs = runs;
         this.tier = tier;
         this.milestone = milestone;
@@ -31,5 +37,12 @@ public class SBDungeon
         this.healing = healing;
         this.damage = damage;
         this.damageClass = damageClass;
+
+        this.exists = (runs | tier | milestone | mobs | score | watcher | mostMobs | time | timeS | timeSPlus | healing | damage) != -1;
+    }
+
+    public boolean exists()
+    {
+        return exists;
     }
 }

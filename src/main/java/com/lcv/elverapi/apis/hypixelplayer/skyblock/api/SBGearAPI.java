@@ -2,6 +2,7 @@ package com.lcv.elverapi.apis.hypixelplayer.skyblock.api;
 
 import com.lcv.elverapi.apis.SubApi;
 import com.lcv.elverapi.apis.hypixelplayer.skyblock.SkyblockAPI;
+import com.lcv.elverapi.apis.hypixelplayer.skyblock.util.SBArmor;
 import com.lcv.elverapi.apis.hypixelplayer.skyblock.util.SBItem;
 import me.nullicorn.nedit.NBTReader;
 import me.nullicorn.nedit.type.NBTCompound;
@@ -30,13 +31,14 @@ public class SBGearAPI extends SubApi
         }
     }
 
-    public SBItem[] getArmor()
+    public SBArmor getArmor()
     {
-        return (SBItem[]) internalApiMap.computeIfAbsent("armor", k -> {
+        return (SBArmor) internalApiMap.computeIfAbsent("armor", k -> {
             NBTList list = parseBase64(get(null, "inv_armor.data")).getList("i");
-            return IntStream.range(0, list.size())
+            return new SBArmor(IntStream
+                    .range(0, list.size())
                     .mapToObj(i -> new SBItem(list.getCompound(3 - i)))
-                    .toArray(SBItem[]::new);
+                    .toArray(SBItem[]::new));
         });
     }
     public SBItem[] getEquipment()
@@ -48,15 +50,18 @@ public class SBGearAPI extends SubApi
                     .toArray(SBItem[]::new);
         });
     }
-    public SBItem[][] getWardrobe()
+    public SBArmor[] getWardrobe()
     {
-        return (SBItem[][]) internalApiMap.computeIfAbsent("wardrobe", k -> {
+        return (SBArmor[]) internalApiMap.computeIfAbsent("wardrobe", k ->
+        {
             NBTList list = parseBase64(get(null, "wardrobe_contents.data")).getList("i");
-            return IntStream.range(0, 18)
-                    .mapToObj(i -> IntStream.range(0, 4)
+            return IntStream
+                    .range(0, 18)
+                    .mapToObj(i -> new SBArmor(IntStream
+                            .range(0, 4)
                             .mapToObj(j -> new SBItem(list.getCompound((i / 9) * 36 + (i % 9) + (j * 9))))
-                            .toArray(SBItem[]::new))
-                    .toArray(SBItem[][]::new);
+                            .toArray(SBItem[]::new)))
+                    .toArray(SBArmor[]::new);
         });
     }
 }

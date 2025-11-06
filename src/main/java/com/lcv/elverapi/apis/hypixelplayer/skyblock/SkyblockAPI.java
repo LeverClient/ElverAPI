@@ -65,6 +65,10 @@ public class SkyblockAPI extends Api {
     {
         return (SBDungeonsAPI) internalApiMap.computeIfAbsent("api/dungeons", k -> new SBDungeonsAPI(this));
     }
+    public SBSlayerAPI getSlayersApi()
+    {
+        return (SBSlayerAPI) internalApiMap.computeIfAbsent("api/dungeons", k -> new SBSlayerAPI(this));
+    }
 
     @Override
     public String getApiEndpoint() {
