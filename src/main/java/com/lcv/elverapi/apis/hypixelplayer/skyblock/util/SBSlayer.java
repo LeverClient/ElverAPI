@@ -2,7 +2,7 @@ package com.lcv.elverapi.apis.hypixelplayer.skyblock.util;
 
 public class SBSlayer
 {
-    public final String slayer;
+    public final String name;
     public final int xp;
     public final int level;
     public final int overflowXp;
@@ -15,9 +15,9 @@ public class SBSlayer
 
     private final boolean exists;
 
-    public SBSlayer(String slayer, int xp, int tier1, int tier2, int tier3, int tier4, int tier5)
+    public SBSlayer(String name, int xp, int tier1, int tier2, int tier3, int tier4, int tier5)
     {
-        this.slayer = slayer;
+        this.name = name;
         this.xp = xp;
         this.level = calculateLevel(xp);
         this.overflowXp = calculateOverflowXp(xp);
